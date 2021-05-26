@@ -27,12 +27,12 @@ export default function CTable({ data, delPic, handleShowImage, loading }) {
         <TableHead>
           <TableRow>
             <TableCell>name</TableCell>
-            <TableCell align="right">Uploded</TableCell>
-            <TableCell align="right">Type</TableCell>
-            <TableCell align="right">Dimension</TableCell>
-            <TableCell align="right">Size</TableCell>
-            <TableCell align="right">Thumbnail</TableCell>
-            <TableCell align="right">Action</TableCell>
+            <TableCell align="center">Uploded</TableCell>
+            <TableCell align="center">Type</TableCell>
+            <TableCell align="center">Dimension</TableCell>
+            <TableCell align="center">Size</TableCell>
+            <TableCell align="center">Thumbnail</TableCell>
+            <TableCell align="center">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -42,15 +42,13 @@ export default function CTable({ data, delPic, handleShowImage, loading }) {
               <TableCell align="right">
                 {new Date(row.uploaded).toLocaleString()}
               </TableCell>
-              <TableCell align="right">{row.type}</TableCell>
-              <TableCell align="right">{row.dimension}</TableCell>
-              <TableCell align="right">{getSize(row.size)}</TableCell>
-              <TableCell align="right">
-                <div style={{ height: 100, width: 100 }}>
-                  <TileImage src={row.thumbnail} />
-                </div>
+              <TableCell align="center">{row.type}</TableCell>
+              <TableCell align="center">{row.dimension}</TableCell>
+              <TableCell align="center">{getSize(row.size)}</TableCell>
+              <TableCell align="center">
+                <TileImage src={row.thumbnail} />
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 <ButtonGroup
                   orientation="vertical"
                   color="primary"

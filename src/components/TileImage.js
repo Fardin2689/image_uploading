@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { withStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-const styles = {
+const useStyles = makeStyles(() => ({
   imageContainer: {
     width: '100%',
     paddingTop: '100%',
@@ -16,20 +16,18 @@ const styles = {
     right: 0,
     margin: 'auto',
   },
-};
+}));
 
-function SelfAligningImage(props) {
-  const { classes, src, roundedBorder, theme } = props;
-  const img = useRef();
+function TileImage({ src }) {
+  const classes = useStyles();
   const [hasMoreWidthThanHeight, setHasMoreWidthThanHeight] = useState(null);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const img = useRef();
 
   const onLoad = useCallback(() => {
-    if (img.current.naturalHeight < img.current.naturalWidth) {
-      setHasMoreWidthThanHeight(true);
-    } else {
-      setHasMoreWidthThanHeight(false);
-    }
+    setHasMoreWidthThanHeight(
+      img.current.naturalHeight < img.current.naturalWidth
+    );
     setHasLoaded(true);
   }, [img, setHasLoaded, setHasMoreWidthThanHeight]);
 
@@ -40,7 +38,6 @@ function SelfAligningImage(props) {
           width: hasMoreWidthThanHeight ? '100%' : 'auto',
           height: hasMoreWidthThanHeight ? 'auto' : '100%',
           display: hasLoaded ? 'block' : 'none',
-          borderRadius: roundedBorder ? theme.shape.borderRadius : 0,
         }}
         ref={img}
         className={classes.image}
@@ -52,4 +49,4 @@ function SelfAligningImage(props) {
   );
 }
 
-export default withStyles(styles, { withTheme: true })(SelfAligningImage);
+export default TileImage;

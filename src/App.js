@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
-import DropZone from './DropZone';
 
 import useApi from './hooks/useApi';
 import imageApi from './api/image';
+import DropZone from './dropZone';
 import CTable from './CTable';
 import ShowImageDialog from './components/ShowImageDialog';
 
