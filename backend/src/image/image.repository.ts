@@ -19,6 +19,7 @@ export class ImageRepository extends Repository<Image> {
 
     img.file = file.buffer;
     await img.save();
+    delete img.file;
     return img;
   }
 }
