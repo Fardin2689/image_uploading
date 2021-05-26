@@ -3,6 +3,7 @@ import { Grid, Button, ButtonGroup } from '@material-ui/core';
 import { useDropzone } from 'react-dropzone';
 import { v1 as uuidv1 } from 'uuid';
 
+import useApi from './hooks/useApi';
 import noImg from './unnamed.png';
 import imageApi from './api/image';
 import { imageValidator, imageResizer } from './imageHelper';
@@ -34,6 +35,7 @@ export default function DropZone({ addPic }) {
   const [file, setFile] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [dimension, setDimension] = useState('');
+  const sendApi = useApi(imageApi.uploadImage);
 
   const onDrop = useCallback((acceptedFiles) => {
     const thumb = URL.createObjectURL(acceptedFiles[0]);
@@ -46,9 +48,8 @@ export default function DropZone({ addPic }) {
     image.src = thumb;
 
     setFile(acceptedFiles[0]);
-    console.log(acceptedFiles[0]);
-
-    setThumbnail(imageResizer(acceptedFiles[0]));
+    imageResizer(acceptedFiles[0]).then((uri) => setThumbnail(uri));
+    // console.log(uri);
   }, []);
 
   const { getRootProps, getInputProps, isDragAccept, isDragReject } =
@@ -98,9 +99,8 @@ export default function DropZone({ addPic }) {
     item.append('thumbnail', thumbnail);
     item.append('file', file, id);
 
-    console.log(file);
-    addPic({ id, name: id, size, type, dimension, uploaded, img, thumbnail });
-    await imageApi.uploadImage(item);
+    const res = await sendApi.request(item);
+    if (res.ok) addPic(res.data);
   };
 
   return (
@@ -149,8 +149,8 @@ export default function DropZone({ addPic }) {
         style={{ height: 100, width: 100 }}
       >
         <ButtonGroup orientation="vertical" color="primary" variant="text">
-          <Button onClick={handleUpload} disabled={!img}>
-            Upload
+          <Button onClick={handleUpload} disabled={!img || sendApi.loading}>
+            {sendApi.loading ? 'Sending' : 'Upload'}
           </Button>
           <Button onClick={handleCancel}>Cancel</Button>
         </ButtonGroup>

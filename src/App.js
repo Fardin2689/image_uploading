@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import DropZone from './DropZone';
+
+import useApi from './hooks/useApi';
 import imageApi from './api/image';
 import CTable from './components/CTable';
 import ShowImageDialog from './components/ShowImageDialog';
@@ -28,10 +28,11 @@ export default function DenseAppBar() {
   const classes = useStyles();
   const [pic, setPic] = useState([]);
   const [dialog, setDialog] = useState({ open: false });
+  const sendApi = useApi(imageApi.getImages);
 
   const getData = async () => {
-    const data = await imageApi.getImages();
-    if (data.ok) setPic(data.data);
+    const res = await sendApi.request();
+    if (res.ok) setPic(res.data);
   };
 
   const addPic = (newPic) => setPic([...pic, newPic]);
@@ -44,6 +45,7 @@ export default function DenseAppBar() {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -58,7 +60,15 @@ export default function DenseAppBar() {
       <Toolbar />
       <main className={classes.main}>
         <DropZone addPic={addPic} />
-        <CTable data={pic} delPic={delPic} handleShowImage={handleShowImage} />
+        {sendApi.loading ? (
+          <h1>Loading</h1>
+        ) : (
+          <CTable
+            data={pic}
+            delPic={delPic}
+            handleShowImage={handleShowImage}
+          />
+        )}
       </main>
       {dialog.open && (
         <ShowImageDialog

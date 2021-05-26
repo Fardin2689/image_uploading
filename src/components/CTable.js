@@ -3,14 +3,17 @@ import { Table, TableBody, TableCell, TableRow } from '@material-ui/core';
 import { TableContainer, TableHead, Paper } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
 
+import useApi from '../hooks/useApi';
 import imageApi from '../api/image';
 import TileImage from './TileImage';
 import { getSize } from '../imageHelper';
 
 export default function CTable({ data, delPic, handleShowImage }) {
+  const sendApi = useApi(imageApi.deleteImage);
+
   const handleDelete = async (name, id) => {
-    delPic(name);
-    await imageApi.deleteImage(id);
+    const res = await sendApi.request(id);
+    if (res.ok) delPic(name);
   };
 
   return (
@@ -49,7 +52,7 @@ export default function CTable({ data, delPic, handleShowImage }) {
                   variant="text"
                 >
                   <Button onClick={() => handleDelete(row.name, row.id)}>
-                    Delete
+                    {sendApi.loading ? 'Proccessing' : 'Delete'}
                   </Button>
                   <Button
                     onClick={() => handleShowImage(row.name, row.id, row.type)}

@@ -3,13 +3,15 @@ import { Button, Dialog, DialogActions } from '@material-ui/core';
 import { DialogContent, DialogTitle } from '@material-ui/core';
 
 import imageApi from '../api/image';
+import useApi from '../hooks/useApi';
 import { getImgFromBuff } from '../imageHelper';
 
 export default function ShowImageDialog({ data, handleClose }) {
   const [img, setImg] = useState(null);
+  const sendApi = useApi(imageApi.getImageById);
 
   const getImage = async () => {
-    const res = await imageApi.getImageById(data.id);
+    const res = await sendApi.request(data.id);
     if (res.ok) {
       const pic = getImgFromBuff(res.data.file.data, data.type);
       setImg(pic);
@@ -24,7 +26,15 @@ export default function ShowImageDialog({ data, handleClose }) {
     <Dialog open onClose={handleClose}>
       <DialogTitle>{data.name}</DialogTitle>
       <DialogContent>
-        <img src={img} alt={''} style={{ height: '100%', width: '100%' }}></img>
+        {sendApi.loading ? (
+          <div>Loading</div>
+        ) : (
+          <img
+            src={img}
+            alt={''}
+            style={{ height: '100%', width: '100%' }}
+          ></img>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary" autoFocus>
