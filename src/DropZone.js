@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { Grid, Button, ButtonGroup } from '@material-ui/core';
+import { Grid, Button, ButtonGroup, CircularProgress } from '@material-ui/core';
 import { useDropzone } from 'react-dropzone';
 import { v1 as uuidv1 } from 'uuid';
 
@@ -150,7 +150,7 @@ export default function DropZone({ addPic }) {
       >
         <ButtonGroup orientation="vertical" color="primary" variant="text">
           <Button onClick={handleUpload} disabled={!img || sendApi.loading}>
-            {sendApi.loading ? 'Sending' : 'Upload'}
+            {sendApi.loading ? <CircularProgress size={24} /> : 'Upload'}
           </Button>
           <Button onClick={handleCancel}>Cancel</Button>
         </ButtonGroup>

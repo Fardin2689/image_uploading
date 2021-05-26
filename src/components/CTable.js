@@ -6,9 +6,10 @@ import { Button, ButtonGroup } from '@material-ui/core';
 import useApi from '../hooks/useApi';
 import imageApi from '../api/image';
 import TileImage from './TileImage';
+import { OverlayLoading } from '../components/Loading';
 import { getSize } from '../imageHelper';
 
-export default function CTable({ data, delPic, handleShowImage }) {
+export default function CTable({ data, delPic, handleShowImage, loading }) {
   const sendApi = useApi(imageApi.deleteImage);
 
   const handleDelete = async (name, id) => {
@@ -17,7 +18,11 @@ export default function CTable({ data, delPic, handleShowImage }) {
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      style={{ position: 'relative', height: '100%' }}
+    >
+      {(sendApi.loading || loading) && <OverlayLoading />}
       <Table style={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
@@ -52,7 +57,7 @@ export default function CTable({ data, delPic, handleShowImage }) {
                   variant="text"
                 >
                   <Button onClick={() => handleDelete(row.name, row.id)}>
-                    {sendApi.loading ? 'Proccessing' : 'Delete'}
+                    Delete
                   </Button>
                   <Button
                     onClick={() => handleShowImage(row.name, row.id, row.type)}

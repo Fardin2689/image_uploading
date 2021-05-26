@@ -5,6 +5,7 @@ import { DialogContent, DialogTitle } from '@material-ui/core';
 import imageApi from '../api/image';
 import useApi from '../hooks/useApi';
 import { getImgFromBuff } from '../imageHelper';
+import { Loading } from './Loading';
 
 export default function ShowImageDialog({ data, handleClose }) {
   const [img, setImg] = useState(null);
@@ -27,7 +28,7 @@ export default function ShowImageDialog({ data, handleClose }) {
       <DialogTitle>{data.name}</DialogTitle>
       <DialogContent>
         {sendApi.loading ? (
-          <div>Loading</div>
+          <Loading />
         ) : (
           <img
             src={img}

@@ -60,15 +60,12 @@ export default function DenseAppBar() {
       <Toolbar />
       <main className={classes.main}>
         <DropZone addPic={addPic} />
-        {sendApi.loading ? (
-          <h1>Loading</h1>
-        ) : (
-          <CTable
-            data={pic}
-            delPic={delPic}
-            handleShowImage={handleShowImage}
-          />
-        )}
+        <CTable
+          loading={sendApi.loading}
+          data={pic}
+          delPic={delPic}
+          handleShowImage={handleShowImage}
+        />
       </main>
       {dialog.open && (
         <ShowImageDialog
