@@ -3,11 +3,11 @@ import { Table, TableBody, TableCell, TableRow } from '@material-ui/core';
 import { TableContainer, TableHead, Paper } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
 
-import useApi from '../hooks/useApi';
-import imageApi from '../api/image';
-import TileImage from './TileImage';
-import { OverlayLoading } from '../components/Loading';
-import { getSize } from '../imageHelper';
+import useApi from './hooks/useApi';
+import imageApi from './api/image';
+import TileImage from './components/TileImage';
+import { OverlayLoading } from './components/Loading';
+import { getSize } from './imageHelper';
 
 export default function CTable({ data, delPic, handleShowImage, loading }) {
   const sendApi = useApi(imageApi.deleteImage);

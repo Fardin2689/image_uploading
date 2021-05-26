@@ -5,7 +5,7 @@ import DropZone from './DropZone';
 
 import useApi from './hooks/useApi';
 import imageApi from './api/image';
-import CTable from './components/CTable';
+import CTable from './CTable';
 import ShowImageDialog from './components/ShowImageDialog';
 
 const useStyles = makeStyles(() => ({
