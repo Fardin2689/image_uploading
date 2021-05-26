@@ -34,12 +34,9 @@ export const imageValidator = (file) => {
   return null;
 };
 
-export const imageResizer = (file) => {
-  try {
-    Resizer.imageFileResizer(file, 200, 150, 'JPEG', 100, 0, (uri) => {
-      return uri;
+export const imageResizer = (file) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(file, 150, 150, 'JPEG', 100, 0, (uri) => {
+      resolve(uri);
     });
-  } catch (err) {
-    console.log('Error in resizing image ->', err);
-  }
-};
+  });
