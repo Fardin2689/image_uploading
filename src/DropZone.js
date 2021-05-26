@@ -1,34 +1,21 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { Grid, Button, ButtonGroup } from '@material-ui/core';
 import { useDropzone } from 'react-dropzone';
-import Grid from '@material-ui/core/Grid';
-import noImg from './unnamed.png';
-import { Button, ButtonGroup } from '@material-ui/core';
-import imageApi from './api/image';
 import { v1 as uuidv1 } from 'uuid';
-import Resizer from 'react-image-file-resizer';
+
+import noImg from './unnamed.png';
+import imageApi from './api/image';
+import { imageValidator, imageResizer } from './imageHelper';
 
 const baseStyle = {
-  // flex: 1,
   display: 'flex',
-  // flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  // padding: '20px',
-  // borderWidth: 2,
-  // borderRadius: 5,
-  // borderColor: '#eeeeee',
-  // borderStyle: 'dashed',
   backgroundColor: 'antiquewhite',
   height: '100%',
   color: '#bdbdbd',
-  // outline: 'none',
   transition: 'border .24s ease-in-out, background .24s ease-in-out',
 };
-
-// const activeStyle = {
-//   borderColor: '#2196f3',
-//   backgroundColor: '#00f',
-// };
 
 const acceptStyle = {
   borderColor: '#00e676',
@@ -41,19 +28,6 @@ const rejectStyle = {
   backgroundColor: '#fda5b6',
   color: 'black',
 };
-
-const maxLength = 20;
-
-function nameLengthValidator(file) {
-  if (file.name.length > maxLength) {
-    return {
-      code: 'name-too-large',
-      message: `Name is larger than ${maxLength} characters`,
-    };
-  }
-
-  return null;
-}
 
 export default function DropZone({ addPic }) {
   const [img, setImg] = useState(null);
@@ -74,21 +48,7 @@ export default function DropZone({ addPic }) {
     setFile(acceptedFiles[0]);
     console.log(acceptedFiles[0]);
 
-    try {
-      Resizer.imageFileResizer(
-        acceptedFiles[0],
-        200,
-        150,
-        'JPEG',
-        100,
-        0,
-        (uri) => {
-          setThumbnail(uri);
-        }
-      );
-    } catch (err) {
-      console.log(err);
-    }
+    setThumbnail(imageResizer(acceptedFiles[0]));
   }, []);
 
   const { getRootProps, getInputProps, isDragAccept, isDragReject } =
@@ -96,7 +56,7 @@ export default function DropZone({ addPic }) {
       accept: 'image/jpeg, image/png, image/gif',
       maxFiles: 1,
       multiple: false,
-      validator: nameLengthValidator,
+      validator: imageValidator,
       onDropAccepted: onDrop,
     });
 

@@ -8,7 +8,7 @@ import imageApi from './api/image';
 import CTable from './components/CTable';
 import ShowImageDialog from './components/ShowImageDialog';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     height: '100vh',
     display: 'flex',
@@ -21,15 +21,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-  },
-  top: {
-    backgroundColor: '#0f0',
-  },
-  bot: {
-    flexGrow: 1,
-    backgroundColor: '#f00',
-    overflow: 'auto',
-    // minHeight: 'min-content',
   },
 }));
 
@@ -55,7 +46,6 @@ export default function DenseAppBar() {
     getData();
   }, []);
 
-  console.log(pic);
   return (
     <div className={classes.root}>
       <AppBar position="fixed">

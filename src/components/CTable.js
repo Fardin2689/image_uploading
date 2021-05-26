@@ -1,34 +1,13 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import { Table, TableBody, TableCell, TableRow } from '@material-ui/core';
+import { TableContainer, TableHead, Paper } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
+
 import imageApi from '../api/image';
 import TileImage from './TileImage';
+import { getSize } from '../imageHelper';
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-});
-
-const getSize = (s) => {
-  return s >= 1024 * 1024
-    ? `${(s / (1024 * 1024)).toFixed(2)} MB`
-    : s >= 1024
-    ? `${(s / 1024).toFixed(2)} KB`
-    : `${s} B`;
-};
-
-export default function BasicTable({ data, delPic, handleShowImage }) {
-  const classes = useStyles();
-
+export default function CTable({ data, delPic, handleShowImage }) {
   const handleDelete = async (name, id) => {
     delPic(name);
     await imageApi.deleteImage(id);
@@ -36,7 +15,7 @@ export default function BasicTable({ data, delPic, handleShowImage }) {
 
   return (
     <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
+      <Table style={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
             <TableCell>name</TableCell>
@@ -51,9 +30,7 @@ export default function BasicTable({ data, delPic, handleShowImage }) {
         <TableBody>
           {data.map((row) => (
             <TableRow key={row.name}>
-              <TableCell>
-                <Typography>{row.name}</Typography>
-              </TableCell>
+              <TableCell>{row.name}</TableCell>
               <TableCell align="right">
                 {new Date(row.uploaded).toLocaleString()}
               </TableCell>
@@ -63,11 +40,6 @@ export default function BasicTable({ data, delPic, handleShowImage }) {
               <TableCell align="right">
                 <div style={{ height: 100, width: 100 }}>
                   <TileImage src={row.thumbnail} />
-                  {/* <img
-                    src={row.thumbnail}
-                    alt={''}
-                    style={{ height: '100%', width: 'auto' }}
-                  ></img> */}
                 </div>
               </TableCell>
               <TableCell align="right">

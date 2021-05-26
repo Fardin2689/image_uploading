@@ -1,7 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { GridListTileBar, withStyles } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import InfoIcon from '@material-ui/icons/Info';
+import { withStyles } from '@material-ui/core';
 
 const styles = {
   imageContainer: {
@@ -18,13 +16,10 @@ const styles = {
     right: 0,
     margin: 'auto',
   },
-  icon: {
-    color: 'rgba(255, 255, 255, 0.54)',
-  },
 };
 
 function SelfAligningImage(props) {
-  const { classes, src, title, subtitle, roundedBorder, theme } = props;
+  const { classes, src, roundedBorder, theme } = props;
   const img = useRef();
   const [hasMoreWidthThanHeight, setHasMoreWidthThanHeight] = useState(null);
   const [hasLoaded, setHasLoaded] = useState(false);
@@ -53,17 +48,6 @@ function SelfAligningImage(props) {
         src={src}
         alt=""
       />
-      {/* {title && (
-        <GridListTileBar
-          title={title}
-          subtitle={subtitle}
-          actionIcon={
-            <IconButton className={classes.icon}>
-              <InfoIcon />
-            </IconButton>
-          }
-        />
-      )} */}
     </div>
   );
 }
