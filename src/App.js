@@ -1,21 +1,81 @@
-function App() {
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import DropZone from './DropZone';
+import imageApi from './api/image';
+import CTable from './components/CTable';
+import ShowImageDialog from './components/ShowImageDialog';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
+  main: {
+    flexGrow: 1,
+    backgroundColor: 'lightgrey',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
+  top: {
+    backgroundColor: '#0f0',
+  },
+  bot: {
+    flexGrow: 1,
+    backgroundColor: '#f00',
+    overflow: 'auto',
+    // minHeight: 'min-content',
+  },
+}));
+
+export default function DenseAppBar() {
+  const classes = useStyles();
+  const [pic, setPic] = useState([]);
+  const [dialog, setDialog] = useState({ open: false });
+
+  const getData = async () => {
+    const data = await imageApi.getImages();
+    if (data.ok) setPic(data.data);
+  };
+
+  const addPic = (newPic) => setPic([...pic, newPic]);
+
+  const delPic = (name) => setPic(pic.filter((el) => el.name !== name));
+
+  const handleShowImage = (name, id, type) => {
+    setDialog({ open: true, name, id, type });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  console.log(pic);
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={classes.root}>
+      <AppBar position="fixed">
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Upload Photos
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Toolbar />
+      <main className={classes.main}>
+        <DropZone addPic={addPic} />
+        <CTable data={pic} delPic={delPic} handleShowImage={handleShowImage} />
+      </main>
+      {dialog.open && (
+        <ShowImageDialog
+          data={dialog}
+          handleClose={() => setDialog({ open: false })}
+        />
+      )}
     </div>
   );
 }
-
-export default App;
